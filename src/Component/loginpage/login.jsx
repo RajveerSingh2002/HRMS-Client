@@ -24,7 +24,7 @@ function Login() {
             formError.confirmPassword = "confirm password is required";
         } else {
             console.log("api data", logindata);
-            navigate("/pannel");
+            navigate("/admin");
         }
         setError(formError);
     };
