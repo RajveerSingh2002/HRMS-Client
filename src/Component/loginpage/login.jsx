@@ -74,7 +74,7 @@ function Login() {
                     <div> 
                         <button className="w-50 bg-blue-500 text-white h-8 rounded-lg mt-5" onClick={handleClick}>Login</button>
                     </div>
-                        <Link to="/signuppage">don't have an account</Link>
+                        <Link to="/">don't have an account</Link>
                 </div>
             </div>                
         </div>
