@@ -1,18 +1,11 @@
-import React from "react";
-import { Button } from "@/components/ui/button"
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Field, FieldGroup } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label" 
+} from "@/components/ui/dialog";
 import { useState } from "react";
 import {
   Card,
@@ -22,162 +15,453 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
-export default function Employees() {
-////first empData hold kerega value oor set update kerega value
-    let [empData,setEmpData] = useState({}); 
-    let handleChange = (e) => {
-        let {name,value} = e.target;
+function Employees() {
+  let [empData, setEmpData] = useState({});
+  let [error, setError] = useState({});
+  let [openModal, setOpenModal] = useState(false);
+  let [openEditModal, setOpenEditModal] = useState(false);
+  let [empFormData, setEmpFormData] = useState({});
 
-        setEmpData ({...empData,[name]:value});
+  let handleChange = (e) => {
+    let { name, value } = e.target;
+    setEmpData({ ...empData, [name]: value });
+  };
 
-        
-    };
-    console.log(empData)
-    return(
-        <>
-        <div>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Employees</CardTitle>
-                    {/* <CardDescription>Card Description</CardDescription> */}
-                    <CardAction>
-                        <Dialog>
-                            <form>
-                                <DialogTrigger className="h-10 w-50 border-2 border-blue-600 rounded-2xl">Add Employee</DialogTrigger>
-                                    {/* <Button variant="outline">Open</Button>
-                                </DialogTrigger> */}
-                                <DialogContent className="sm:max-w-sm h-150 scroll-smooth overflow-scroll">
-                                <DialogHeader>
-                                    <DialogTitle>Employee Form</DialogTitle>
-                                        <DialogDescription>
-                                            <div>
-                                                <label className="font-bold text-black">Emp id: </label>
-                                            </div>
-                                            <div>
-                                                <input type="text" placeholder=" Enter the  Employee ID" className="w-full h-8 border-2 border-gray-800 rounded" name="empId" onChange={handleChange}></input>
-                                            </div>
-                                            <div className="mt-5">
-                                                <label className="font-bold text-black ">Emp Name: </label>
-                                            </div>
-                                            <div className="">
-                                                <input type="text" placeholder=" Enter the  Employee Name" className="w-full h-8 border-2 border-gray-800 rounded" name="empName" onChange={handleChange}></input>
-                                            </div>
-                                            <div className="mt-5">
-                                                <label className="font-bold text-black ">Emp Gender: </label>
-                                            </div>
-                                            <div className="">
-                                                <input type="text" placeholder=" Enter the  Employee Gender" className="w-full h-8 border-2 border-gray-800 rounded" name="empGender" onChange={handleChange}></input>
-                                            </div>
-                                            <div className="mt-5">
-                                                <label className="font-bold text-black ">Emp Phone: </label>
-                                            </div>
-                                            <div className="">
-                                                <input type="number" placeholder=" Enter the  Employee Phone" className="w-full h-8 border-2 border-gray-800 rounded" name="empPhone" onChange={handleChange}></input>
-                                            </div>
-                                            <div className="mt-5">
-                                                <label className="font-bold text-black ">Emp Address: </label>
-                                            </div>
-                                            <div className="">
-                                                <input type="text" placeholder=" Enter the  Employee Address" className="w-full h-8 border-2 border-gray-800 rounded" name="empAddress" onChange={handleChange}></input>
-                                            </div>
-                                            <div className="mt-5">
-                                                <label className="font-bold text-black ">Emp DOB: </label>
-                                            </div>
-                                            <div className="">
-                                                <input type="date" placeholder=" Enter the  Employee DOB" className="w-full h-8 border-2 border-gray-800 rounded" name="empDob" onChange={handleChange}></input>
-                                            </div>
-                                            <div className="mt-5">
-                                                <label className="font-bold text-black ">Joining Date: </label>
-                                            </div>
-                                            <div className="">
-                                                <input type="date" placeholder=" Enter the  Joinging Date" className="w-full h-8 border-2 border-gray-800 rounded" name="empJoingingdate" onChange={handleChange}></input>
-                                            </div>
-                                            <div className="mt-5">
-                                                <label className="font-bold text-black ">Employee Department: </label>
-                                            </div>
-                                            <div className="">
-                                                <input type="text" placeholder=" Enter the  Employee Department" className="w-full h-8 border-2 border-gray-800 rounded" name="empDepartment" onChange={handleChange}></input>
-                                            </div>
-                                            <div className="mt-5">
-                                                <label className="font-bold text-black ">Employee Designation: </label>
-                                            </div>
-                                            <div className="">
-                                                <input type="text" placeholder=" Enter the  Employee Designation" className="w-full h-8 border-2 border-gray-800 rounded" name="empDesignation" onChange={handleChange}></input>
-                                            </div>
-                                        </DialogDescription>
-                                </DialogHeader>
-                                {/* <FieldGroup>
-                                    <Field>
-                                    <Label htmlFor="name-1">Name</Label>
-                                    <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
-                                    </Field>
-                                    <Field>
-                                    <Label htmlFor="username-1">Username</Label>
-                                    <Input id="username-1" name="username" defaultValue="@peduarte" />
-                                    </Field>
-                                </FieldGroup> */}
-                                    <DialogFooter>
-                                        <DialogClose asChild>
-                                                <div className="">
-                                                    <Button variant="outline">Close</Button>
-                                                </div>
-                                            </DialogClose>
-                                                <div className="">
-                                                    <Button type="submit">Submit</Button>
-                                                </div>
-                                    </DialogFooter>
+  
 
-                                </DialogContent>
-                            </form>
-                        </Dialog>
+  let empErrors = {};
 
-                    </CardAction>
-                </CardHeader>
-                <CardContent>
-            <table class="border-collapse border border-gray-400 ...">
-                <thead className="bg-blue-300">
-                    <tr>
-                    <th class="border border-gray-300 ...">Emp Id</th>
-                    <th class="border border-gray-300 ...">Emp Name</th>
-                    <th class="border border-gray-300 ...">Emp Gender</th>
-                    <th class="border border-gray-300 ...">Emp Email</th>
-                    <th class="border border-gray-300 ...">Emp DOB</th>
-                    <th class="border border-gray-300 ...">Date of Joining</th>
-                    <th class="border border-gray-300 ...">Department</th>
-                    <th class="border border-gray-300 ...">Designation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-300 ...">{empData.empId}</td>
-                        <td class="border border-gray-300 ...">{empData.empName}</td>
-                        <td class="border border-gray-300 ...">{empData.empGender}</td>
-                        <td class="border border-gray-300 ...">{empData.empEmail}</td>
-                        <td class="border border-gray-300 ...">{empData.empDob}</td>
-                        <td class="border border-gray-300 ...">{empData.empJoingingdate}</td>
-                        <td class="border border-gray-300 ...">{empData.empDepartment}</td>
-                        <td class="border border-gray-300 ...">{empData.empDesignation}</td>
+  // let handleValidate = (empData) => {
+  //   if (!empData.empEmail) {
+  //     empErrors.empEmail = "Email is required.";
+  //   }
+  //   if (!empData.empID) {
+  //     empErrors.empID = "Employee ID is required.";
+  //   }
+  //   if (!empData.empName) {
+  //     empErrors.empName = "Employee Name is required.";
+  //   }
+  //   if (!empData.empPhone) {
+  //     empErrors.empPhone = "Employee Phone Number is required.";
+  //   } else if (empPhone.length != 10) {
+  //     empErrors.empPhone = "Employee Phone Number must be of 10 numbers.";
+  //   }
+  //   if (!empData.empDob) {
+  //     empErrors.empDob = "Employee Date of Birth is mandatory.";
+  //   }
+  //   if (!empData.empDesig) {
+  //     empErrors.empDesig = "Employee Designation is required.";
+  //   }
+  //   if (!empData.empSalary) {
+  //     empErrors.empSalary = "Please fill your current salary.";
+  //   }
+  //   if (!empData.empJoiningDate) {
+  //     empErrors.empJoiningDate = "Employee Joining date is required.";
+  //   }
+  //   if (!empData.empDept) {
+  //     empErrors.empDept = "Employee Department is required.";
+  //   }
+  //   setError(empErrors);
+  // };
 
-                    </tr>
-                    <tr>
-                    
-                    </tr>
-                    <tr>
-                    {/* <td class="border border-gray-300 ...">Michigan</td>
-                    <td class="border border-gray-300 ...">Detroit</td> */}
-                    </tr>
-                </tbody>
+  console.log(empData);
+
+  let handleClick= () => {
+    setEmpFormData(empData);
+    setOpenModal(false);
+  }
+
+  let handleEditClick = () =>{
+    setEmpFormData(empData);
+    setOpenEditModal(false);
+  }
+
+  return (
+    //Html fragment
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Employees</CardTitle>
+          <CardDescription>Card Description</CardDescription>
+          <CardAction>
+            <Dialog open={openModal} onOpenChange={() => setOpenModal(true)}>
+              <DialogTrigger className="border-2 border-blue-500 rounded-2xl p-2 bg-blue-300">
+                Add Employee
+              </DialogTrigger>
+            </Dialog>
+            <Dialog open={openModal}>
+              <DialogContent className="p-6 h-150 scroll-smooth overflow-auto scrollbar-gutter-auto scrollbar-thumb-sky-200 scrollbar-track-sky-100">
+                <DialogHeader>
+                  <DialogTitle className="mb-4">
+                    New to the organisation? Add yourself⭐
+                  </DialogTitle>
+                  <DialogDescription>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee ID
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter your Employee ID"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empID"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Name
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter your Name"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empName"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Email
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter your email."
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empEmail"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Phone number
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter your phone number."
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empPhone"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Date of Birth
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="date"
+                        placeholder=" Enter your DOB"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empDob"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Designation
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter Employee designation"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empDesig"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Salary
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="number"
+                        placeholder=" Enter your Salary."
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empSalary"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Joining Date.
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="date"
+                        placeholder=" Enter Employee Joining Date"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empJoiningDate"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Department
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter department"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empDept"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 mt-5">
+                      <button
+                        className="px-5 py-2 rounded-lg bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors"
+                        onClick={() => {
+                          setOpenModal(false);
+                        }}
+                      >
+                        Close
+                      </button>
+                      <button className="px-5 py-2 rounded-lg bg-green-500 text-white text-sm font-medium hover:bg-green-600 transition-colors" onClick={handleClick}>
+                        Add
+                      </button>
+                    </div>
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          {/* Table JSX */}
+          <p>
+            <table class="w-full border-collapse border border-gray-400 ...">
+              <thead>
+                <tr>
+                  <th class="border border-gray-300 ...">Emp ID</th>
+                  <th class="border border-gray-300 ...">Emp Name</th>
+                  <th class="border border-gray-300 ...">Emp Email</th>
+                  <th class="border border-gray-300 ...">Emp Phone-number</th>
+                  <th class="border border-gray-300 ...">Emp DOB</th>
+                  <th class="border border-gray-300 ...">Emp Designation</th>
+                  <th class="border border-gray-300 ...">Emp Salary</th>
+                  <th class="border border-gray-300 ...">Emp Joining Date</th>
+                  <th class="border border-gray-300 ...">Emp Department</th>
+                  <th class="border border-gray-300 ...">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="border border-gray-300 ...">{empFormData.empID}</td>
+                  <td class="border border-gray-300 ...">{empFormData.empName}</td>
+                  <td class="border border-gray-300 ...">{empFormData.empEmail}</td>
+                  <td class="border border-gray-300 ...">{empFormData.empPhone}</td>
+                  <td class="border border-gray-300 ...">{empFormData.empDob}</td>
+                  <td class="border border-gray-300 ...">{empFormData.empDesig}</td>
+                  <td class="border border-gray-300 ...">
+                    {empData.empSalary}
+                  </td>
+                  <td class="border border-gray-300 ...">
+                    {empData.empJoiningDate}
+                  </td>
+                  <td class="border border-gray-300 ...">{empFormData.empDept}</td>
+                  <td class="border border-gray-300 ...">
+                    <button>
+                      <Dialog
+                        open={openEditModal}
+                        onOpenChange={() => setOpenEditModal(true)}
+                      >
+                        <DialogTrigger className="border-2 border-blue-500 rounded-2xl p-2 bg-blue-300">
+                          Edit
+                        </DialogTrigger>
+                      </Dialog>
+                    </button>
+                    <button>Delete</button>
+                  </td>
+                </tr>
+              </tbody>
             </table>
-                </CardContent>
-                {/* <CardFooter>
-                    <p>Card Footer</p>
-                </CardFooter> */}
-            </Card>
-
-            
-        </div>
-        </>
-    );
+          </p>
+        </CardContent>
+        <CardFooter>
+          <p>Card Footer</p>
+        </CardFooter>
+      </Card>
+      
+     ///////////////////////////////////////
+      {/* Edit Employee Record Modal */}
+      /////////////////////////////
+      <Dialog open={openEditModal}>
+              <DialogContent className="p-6 h-150 scroll-smooth overflow-auto scrollbar-gutter-auto scrollbar-thumb-sky-200 scrollbar-track-sky-100">
+                <DialogHeader>
+                  <DialogTitle className="mb-4">
+                    Want to change details ? Do it here☕
+                  </DialogTitle>
+                  <DialogDescription>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee ID
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter your Employee ID"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empID"
+                        defaultValue={empFormData.empID}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Name
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter your Name"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empName"
+                        defaultValue={empFormData.empName}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Email
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter your email."
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empEmail"
+                        defaultValue={empFormData.empEmail}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Phone number
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter your phone number."
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empPhone"
+                        defaultValue={empFormData.empPhone}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Date of Birth
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="date"
+                        placeholder=" Enter your DOB"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empDob"
+                        defaultValue={empFormData.empDob}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Designation
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter Employee designation"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empDesig"
+                        defaultValue={empFormData.empDesig}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Salary
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="number"
+                        placeholder=" Enter your Salary."
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empSalary"
+                        defaultValue={empFormData.empSalary}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Joining Date.
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="date"
+                        placeholder=" Enter Employee Joining Date"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empJoiningDate"
+                        defaultValue={empFormData.empJoiningDate}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-black ">
+                        Employee Department
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <input
+                        type="text"
+                        placeholder=" Enter department"
+                        className="w-full h-8 border-2 border-black rounded-md mt-2 "
+                        name="empDept"
+                        defaultValue={empFormData.empDept}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 mt-5">
+                      <button
+                        className="px-5 py-2 rounded-lg bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors"
+                        onClick={() => {
+                          setOpenEditModal(false);
+                        }}
+                      >
+                        Close
+                      </button>
+                      <button className="px-5 py-2 rounded-lg bg-green-500 text-white text-sm font-medium hover:bg-green-600 transition-colors" onClick={handleEditClick}>
+                        Add
+                      </button>
+                    </div>
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+    </>
+  );
 }
+export default Employees;

@@ -2,7 +2,7 @@
 // jsx help us to write js code in react file
 import Login from "./Component/loginpage/login";
 import Signup from "./Component/signuppage/signuppage";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Pannel from "./Component/admin/pannel";
 import Dashboard from "./Component/admin/Dashboard";
 import Employees from "./Component/admin/Pages/Employees";
@@ -18,7 +18,8 @@ function App(){
     <>  
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Login/>}/>
+      <Route path="/" element={<Navigate to="/login" replace />}/>
+      <Route path="/login" element={<Login/>}/>
       <Route path="/signuppage" element={<Signup/>}/>     
       <Route path="/admin" element={<Pannel/>}>
       <Route index element={<Dashboard/>}/>
